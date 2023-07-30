@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<launch>
+
+	<arg name="namespace" default="bridge_0"/>
+
+	<!--Bag play options -->
+	<arg name="bag_start_time" default="0" />
+	<arg name="bag_play_rate" default="1" />  <!--If your PC is running slow, you can try lowering the dataset rate e.g. "0.5"-->
+
+	<!-- GLOBAL TIME PARAM FOR ROSBAG PLAY  -->
+	<param name="use_sim_time" value="true" />
+
+	<!-- PLAY DATASET -->
+	<node pkg="rosbag" type="play" name="rosbag_play" args="/home/bridge_0/Desktop/rosbag_test/bridge_raw.bag
+	--clock --pause -r $(arg bag_play_rate) --start=$(arg bag_start_time)" output="screen"/>
+
+    <!-- With namespace -->
+    <group ns="$(arg namespace)">
+
+	<!--display the bridge (the dataset has an initial /tf_static with all the base tfs-->
+    <include file="$(find bridge_launcher)/launch/static_tfs.launch" args="publish_realsenses_tfs:=true"/>	
+
+
+    <!-- GET THE BACK LIDAR DATA POINTCLOUD  -->
+    <node pkg="lslidar_c16_decoder" type="lslidar_c16_decoder_node" name="back_left_lslidar_c16_decoder_node"> <!--output="screen"-->
+	    <param name="child_frame_id" value="back_left_lslidar"/>
+	    <param name="point_num" value="2000"/>
+	    <param name="channel_num" value="8"/>
+	    <param name="angle_disable_min" value="0"/>
+	    <param name="angle_disable_max" value="0"/>
+	    <param name="min_range" value="0.15"/>
+	    <param name="max_range" value="150.0"/>
+	    <param name="frequency" value="10.0"/>
+	    <param name="publish_point_cloud" value="true"/>
+	    <param name="publish_channels" value="false"/>
+	    <param name="use_gps_ts" value="false"/>
+
+	    <!--output topic remapping for the greater scheme of things -->
+	    <remap from="scan"           to="back_left_lslidar_scan"/>
+	    <remap from="scan_channel"   to="back_left_lslidar_scan_channel"/>
+	    <remap from="layer_num"      to="back_left_lslidar_layer_num"/>
+	    <remap from="lslidar_packet" to="back_left_lslidar_packet"/>
+	    <remap from="lslidar_sweep"  to="back_left_lslidar_sweep"/>
+	    <remap from="lslidar_point_cloud" to="back_left_lslidar_point_cloud"/>
+    </node>
+
+    <!-- GET THE BACK LIDAR DATA POINTCLOUD  -->
+    <node pkg="lslidar_c16_decoder" type="lslidar_c16_decoder_node" name="back_right_lslidar_c16_decoder_node"> <!--output="screen"-->
+	    <param name="child_frame_id" value="back_right_lslidar"/>
+	    <param name="point_num" value="2000"/>
+	    <param name="channel_num" value="8"/>
+	    <param name="angle_disable_min" value="0"/>
+	    <param name="angle_disable_max" value="0"/>
+	    <param name="min_range" value="0.15"/>
+	    <param name="max_range" value="150.0"/>
+	    <param name="frequency" value="10.0"/>
+	    <param name="publish_point_cloud" value="true"/>
+	    <param name="publish_channels" value="false"/>
+	    <param name="use_gps_ts" value="false"/>
+
+	    <!--output topic remapping for the greater scheme of things -->
+	    <remap from="scan"           to="back_right_lslidar_scan"/>
+	    <remap from="scan_channel"   to="back_right_lslidar_scan_channel"/>
+	    <remap from="layer_num"      to="back_right_lslidar_layer_num"/>
+	    <remap from="lslidar_packet" to="back_right_lslidar_packet"/>
+	    <remap from="lslidar_sweep"  to="back_right_lslidar_sweep"/>
+	    <remap from="lslidar_point_cloud" to="back_right_lslidar_point_cloud"/>
+    </node>	
+
+    <!-- GET THE FRONT LIDAR DATA POINTCLOUD  -->
+    <node pkg="lslidar_c16_decoder" type="lslidar_c16_decoder_node" name="front_right_lslidar_c16_decoder_node"> <!--output="screen"-->
+	    <param name="child_frame_id" value="front_right_lslidar"/>
+	    <param name="point_num" value="2000"/>
+	    <param name="channel_num" value="8"/>
+	    <param name="angle_disable_min" value="0"/>
+	    <param name="angle_disable_max" value="0"/>
+	    <param name="min_range" value="0.15"/>
+	    <param name="max_range" value="150.0"/>
+	    <param name="frequency" value="10.0"/>
+	    <param name="publish_point_cloud" value="true"/>
+	    <param name="publish_channels" value="false"/>
+	    <param name="use_gps_ts" value="false"/>
+
+	    <!--output topic remapping for the greater scheme of things -->
+	    <remap from="scan"           to="front_right_lslidar_scan"/>
+	    <remap from="scan_channel"   to="front_right_lslidar_scan_channel"/>
+	    <remap from="layer_num"      to="front_right_lslidar_layer_num"/>
+	    <remap from="lslidar_packet" to="front_right_lslidar_packet"/>  
+	    <remap from="lslidar_sweep"  to="front_right_lslidar_sweep"/>
+	    <remap from="lslidar_point_cloud" to="front_right_lslidar_point_cloud"/>	    
+	</node>
+
+    <!-- GET THE FRONT LIDAR DATA POINTCLOUD  -->
+    <node pkg="lslidar_c16_decoder" type="lslidar_c16_decoder_node" name="front_left_lslidar_c16_decoder_node"> <!--output="screen"-->
+	    <param name="child_frame_id" value="front_left_lslidar"/>
+	    <param name="point_num" value="2000"/>
+	    <param name="channel_num" value="8"/>
+	    <param name="angle_disable_min" value="0"/>
+	    <param name="angle_disable_max" value="0"/>
+	    <param name="min_range" value="0.15"/>
+	    <param name="max_range" value="150.0"/>
+	    <param name="frequency" value="10.0"/>
+	    <param name="publish_point_cloud" value="true"/>
+	    <param name="publish_channels" value="false"/>
+	    <param name="use_gps_ts" value="false"/>
+
+	    <!--output topic remapping for the greater scheme of things -->
+	    <remap from="scan"           to="front_left_lslidar_scan"/>
+	    <remap from="scan_channel"   to="front_left_lslidar_scan_channel"/>
+	    <remap from="layer_num"      to="front_left_lslidar_layer_num"/>
+	    <remap from="lslidar_packet" to="front_left_lslidar_packet"/>  
+	    <remap from="lslidar_sweep"  to="front_left_lslidar_sweep"/>
+	    <remap from="lslidar_point_cloud" to="front_left_lslidar_point_cloud"/>	    
+	</node>	
+
+
+    <!-- Lidars - PCL aggregator and Filter -->
+    <include file="$(find bridge_launcher)/launch/pointcloud_fusion_filter/pointcloud_aggregator_lidars.launch"/>
+    <include file="$(find bridge_launcher)/launch/pointcloud_fusion_filter/pointcloud_filter_all_lidars.launch"/>
+  
+    <!-- Cameras - PCL aggregator and Filter -->
+    <include file="$(find bridge_launcher)/launch/pointcloud_fusion_filter/pointcloud_voxel_filter_all_cams.launch"/>
+    <include file="$(find bridge_launcher)/launch/pointcloud_fusion_filter/pointcloud_aggregator_cameras.launch"/>
+
+    <!-- Final PCL aggregator with filtered cameras and Lidars -->
+    <include file="$(find bridge_launcher)/launch/pointcloud_fusion_filter/pointcloud_aggregator_all.launch"/>
+
+
+	<!--Intel Top RealSense Colored PointCloud-->
+    <!--republish compressed images into raw images readable by the point_cloud_xyzrgb nodelet-->
+    <node pkg="image_transport" type="republish" name="camera_repub_image_rect_color1" args="compressed in:=cam_back_left/color/image_raw raw out:=cam_back_left/color/image_raw"/>
+    <node pkg="image_transport" type="republish" name="camera_repub_image_rect_color2" args="compressed in:=cam_back_right/color/image_raw raw out:=cam_back_right/color/image_raw"/>
+    <node pkg="image_transport" type="republish" name="camera_repub_image_rect_color3" args="compressed in:=cam_front_left/color/image_raw raw out:=cam_front_left/color/image_raw"/>
+    <node pkg="image_transport" type="republish" name="camera_repub_image_rect_color4" args="compressed in:=cam_front_right/color/image_raw raw out:=cam_front_right/color/image_raw"/>
+
+   <!-- Get RGBD registered Point Cloud from Intel -->
+   <node pkg="nodelet" type="nodelet" name="camera_colored_pcl" args="manager" output="screen" /> 
+
+  	<node pkg="nodelet" type="nodelet" name="camera_points_xyzrgb1" args="load depth_image_proc/point_cloud_xyzrgb camera_colored_pcl --no-bond"> 
+	    <remap from="rgb/camera_info" to="cam_back_left/color/camera_info" />   
+	    <remap from="rgb/image_rect_color" to="cam_back_left/color/image_raw"/> 
+	    <remap from="depth_registered/image_rect" to="cam_back_left/aligned_depth_to_color/image_raw"/>
+	    <remap from="depth_registered/points" to="cam_back_left/depth/color/points"/>
+	</node> 
+
+  	<node pkg="nodelet" type="nodelet" name="camera_points_xyzrgb2" args="load depth_image_proc/point_cloud_xyzrgb camera_colored_pcl --no-bond"> 
+	    <remap from="rgb/camera_info" to="cam_back_right/color/camera_info" />   
+	    <remap from="rgb/image_rect_color" to="cam_back_right/color/image_raw"/> 
+	    <remap from="depth_registered/image_rect" to="cam_back_right/aligned_depth_to_color/image_raw"/>
+	    <remap from="depth_registered/points" to="cam_back_right/depth/color/points"/>
+	</node> 
+
+  	<node pkg="nodelet" type="nodelet" name="camera_points_xyzrgb3" args="load depth_image_proc/point_cloud_xyzrgb camera_colored_pcl --no-bond"> 
+	    <remap from="rgb/camera_info" to="cam_front_right/color/camera_info" />   
+	    <remap from="rgb/image_rect_color" to="cam_front_right/color/image_raw"/> 
+	    <remap from="depth_registered/image_rect" to="cam_front_right/aligned_depth_to_color/image_raw"/>
+	    <remap from="depth_registered/points" to="cam_front_right/depth/color/points"/>
+	</node> 	
+
+  	<node pkg="nodelet" type="nodelet" name="camera_points_xyzrgb4" args="load depth_image_proc/point_cloud_xyzrgb camera_colored_pcl --no-bond"> 
+	    <remap from="rgb/camera_info" to="cam_front_left/color/camera_info" />   
+	    <remap from="rgb/image_rect_color" to="cam_front_left/color/image_raw"/> 
+	    <remap from="depth_registered/image_rect" to="cam_front_left/aligned_depth_to_color/image_raw"/>
+	    <remap from="depth_registered/points" to="cam_front_left/depth/color/points"/>
+	</node> 
+
+
+
+    </group>	
+
+</launch>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- RECORD DATASET (with infinite buffer and to a specific folder) -->
+	<node pkg="rosbag" type="record" name="rosbag_record" args="
+
+             /clock                                      
+             /cmd_vel                                      
+             /ground_truth_pose                              
+             /husky_velocity_controller/cmd_vel            
+             /husky_velocity_controller/odom                 
+             /imu/data                                         
+             /imu/data/bias                                   
+             /navsat/fix                                 
+             /navsat/vel
+             /nr_5g/radio_odometry
+             /nr_5g/rsrp
+             /nr_5g/rsrq
+             /nr_5g/rssi
+             /nr_5g/tdoa_ranges
+             /nr_5g/aoa_angles
+             /points
+
+		-b 0 
+		--split --size=20480
+        -o $(env HOME)/" output="screen"/>
+
+</launch>

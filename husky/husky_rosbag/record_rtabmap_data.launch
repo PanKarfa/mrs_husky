@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+
+
+    <!-- record cmd_vel with different name, for security reasons when playing rosbag not send accidently cmd to the robot -->
+    <node pkg="topic_tools" type="relay" name="republish_cmdvel" args="/bridge_0/cmd_vel /bridge_0/cmd_vel_bag" />
+
+	<!-- RECORD DATASET (with infinite buffer and to a specific folder) -->
+	<node pkg="rosbag" type="record" name="rosbag_record" args="
+
+        /bridge_0/lidars_fused_pcl_raw_filtered        
+
+        /bridge_0/cam_right/depth/image_rect_raw
+        /bridge_0/cam_right/depth/color/points_filter
+        /bridge_0/cam_right/color/image_raw
+        /bridge_0/cam_right/aligned_depth_to_color/image_raw
+        /bridge_0/cam_right/color/camera_info
+        /bridge_0/lidars_fused_pcl_raw_filtered 
+        
+
+        /bridge_0/cmd_vel_bag
+        
+	/bridge_0/imu_rion
+
+        /bridge_0/gps/fix
+
+        
+		-b 0 
+		--split --size=20480
+        -o $(env HOME)/" output="screen"/>
+
+</launch>

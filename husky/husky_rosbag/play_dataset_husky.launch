@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+
+	<arg name="namespace" default="bridge_0"/>
+
+	<!--Bag play options -->
+	<arg name="bag_start_time" default="0" />
+	<arg name="bag_play_rate" default="0.8" />  <!--If your PC is running slow, you can try lowering the dataset rate e.g. "0.5"-->
+
+	<!-- GLOBAL TIME PARAM FOR ROSBAG PLAY  -->
+	<param name="use_sim_time" value="true" />
+
+	<!-- PLAY DATASET -->
+	<node pkg="rosbag" type="play" name="rosbag_play" args="
+	 /home/karfatron/Desktop/rosbag_test/raw_bridge.bag  
+	--clock --pause -r $(arg bag_play_rate) --start=$(arg bag_start_time)" output="screen"/>
+
+    <!-- With namespace -->
+    <group ns="$(arg namespace)">
+
+
+
+    </group>	
+	<!--display the bridge (the dataset has an initial /tf_static with all the base tfs-->
+    <include file="$(find bridge_launcher)/launch/static_tfs.launch">
+		<arg name="publish_realsenses_tfs" value="true"/>
+	</include>
+
+</launch>

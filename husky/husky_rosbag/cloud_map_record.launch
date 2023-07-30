@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+
+
+	<!-- RECORD DATASET (with infinite buffer and to a specific folder) -->
+	<node pkg="rosbag" type="record" name="rosbag_record" args="
+
+
+        /bridge_0/cloud_map
+
+
+		-b 0 
+		--split --size=20480
+        -o $(env HOME)/" output="screen"/>
+
+</launch>
